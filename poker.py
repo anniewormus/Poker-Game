@@ -3,7 +3,6 @@
     Created by Annie Wormus 9/23/2021
 '''
 # IMPORTS
-
 import time
 from resources import table
 import random 
@@ -11,7 +10,7 @@ import random
 # Game set up
 suites = ["\u2660", "\u2665", "\u2663", "\u2666"]
 royal = ["K", "Q", "J", "A"]
-
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def set_up():
 # Set up function that determines player name, how many other players
     ''' 
@@ -19,26 +18,34 @@ def set_up():
                 *NONE*
     '''
     welcomeBanner = """
-    +-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
-                 Welcome
-    +-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
++-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
+             Welcome
++-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
     """
     print(welcomeBanner)
 
-    print("Please enter your name: ")
-    playerName = input()
-    print("Hello " + playerName)
+    # print("Please enter your name: ")
+    playerName = "hey"
+    # print("Hello " + playerName)
     
     print(table)
 
-    print("Would you like to start the game (Y/N)?")
+    repeatFlag = True
 
-    start = input()
-    if start == "Y" or start == "y" or start == "yes":
-        play_game(playerName, 1, 500)
-    else:
-        exit_game()
+    while repeatFlag:
 
+        print("Would you like to start the game (Y/N)?")
+
+        start = input()
+        if start == "Y" or start == "y" or start == "yes":
+            play_game(playerName, 1, 500)
+            repeatFlag = False
+        elif start == "N" or start == "n" or start == "no":
+            exit_game()
+        else:
+            print("I'm sorry, I didn't understand your response.")
+        
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def play_game(playerName, round, winnings):
 # Loops through rounds of the game until player runs out of money
 # or manually exits the game
@@ -54,36 +61,48 @@ def play_game(playerName, round, winnings):
     stopGame = False
     hand = ["", "", "", "", ""]
     round = 0
-    inputFlag = False
+    inputFlag = True
 
 
     #while winnings > 0 or stopGame:
     round += 1
+    # print round stats
     round_stats(round, winnings)
-
-    print("Your hand:")
-    hand[0] = "[" + deal_card() + "]"
-    hand[1] = "[" + deal_card() + "]"
+    # deals starting hand / pre-flop
+    deal_starting_hand(hand)
+    # prints hand for player
     print_hand(hand)
 
-    while inputFlag == False:
-        print("\nWould you like to 1) Check 2) Bet or 3) Fold?")
+    while inputFlag:
+        print("\nWould you like to \n1) Check \n2) Bet \n3) Fold?")
         playerCall = input()
 
         if playerCall == "1":
             print("player checked")
-            inputFlag = True
-        if playerCall == "2":
+            inputFlag = False
+        elif playerCall == "2":
             print("player betted")
-            inputFlag = True
-        if playerCall == "3":
+            inputFlag = False
+        elif playerCall == "3":
             print("player folded")
-            inputFlag = True
+            inputFlag = False
         else:
-            print("Not a valid option.")
-    
+            print("Please enter a valid option.")
 
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''   
+def deal_starting_hand(hand):
+# Deals the starting hand to player: two random cards
+    '''
+        Variables: 
+                   hand[0,1] - first two cards in players hand
+        Returns: 
+                *NONE*
+    '''
+    print("Your hand:")
+    hand[0] = "[" + deal_card() + "]"
+    hand[1] = "[" + deal_card() + "]"
 
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def round_stats(roundNum, winnings):
 # Prints round stats - player earnings, and round number
     '''
@@ -93,12 +112,13 @@ def round_stats(roundNum, winnings):
         Returns: 
                 *NONE*
     '''
+    # print(table)
     print("+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+")
     print("\t\tROUND ", roundNum)
     print("Your winnings: $", winnings)
     print("+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+")
-    print(table)
-
+    
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def deal_card():
 # Generates a random card as if it were drawn from a deck
     '''
@@ -128,6 +148,7 @@ def deal_card():
 
     return card
 
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def print_hand(hand):
 # Prints out players current hand
     '''
@@ -139,8 +160,10 @@ def print_hand(hand):
     i = 0
     for i in range(5):
         print(hand[i], end=" "),
+    
+    print()
 
-
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def exit_game():
 # Ends game for player and quits program
     print("Goodbye!")

@@ -1,5 +1,6 @@
 ''' 
-    This program is a simple python script that emulates a poker game
+    This is a simple poker game that has the same rules as the Mario Picture Poker
+    Game.
     Created by Annie Wormus 9/23/2021
 '''
 # IMPORTS
@@ -19,7 +20,7 @@ def set_up():
     '''
     welcomeBanner = """
 +-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
-             Welcome
+           Picture Poker
 +-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
     """
     print(welcomeBanner)
@@ -81,13 +82,27 @@ def play_game(playerName, round, winnings):
             print("player checked")
             inputFlag = False
         elif playerCall == "2":
+            inputFlag = bet(winnings)
             print("player betted")
-            inputFlag = False
         elif playerCall == "3":
             print("player folded")
             inputFlag = False
         else:
             print("Please enter a valid option.")
+
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''   
+def bet(winnings):
+    print("How much would you like to bet?")
+    betValue = input()
+
+    if betValue > winnings:
+        print("You don't have that much money. Please choose another option:")
+        return True
+    else:
+        print_pot
+        return False
+
+
 
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''   
 def deal_starting_hand(hand):
@@ -162,6 +177,10 @@ def print_hand(hand):
         print(hand[i], end=" "),
     
     print()
+
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
+def print_pot():
+    print("You have ")
 
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def exit_game():

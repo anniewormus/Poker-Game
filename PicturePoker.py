@@ -5,12 +5,18 @@
 '''
 # IMPORTS
 import time
-from resources import table
+from resources import table, welcomeBanner
 import random 
 
-# Game set up
-suites = ["\u2660", "\u2665", "\u2663", "\u2666"]
-royal = ["K", "Q", "J", "A"]
+heart = "\u2665"
+smile = "\u263B"
+music = "\u266A"
+star = "*"
+club = "\u2663"
+o = "o"
+
+cards = [heart, smile, music, star, club, o]
+
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def set_up():
 # Set up function that determines player name, how many other players
@@ -18,18 +24,8 @@ def set_up():
         Returns:
                 *NONE*
     '''
-    welcomeBanner = """
-+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
-           Picture Poker
-+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
-    """
-    print(welcomeBanner)
 
-    # print("Please enter your name: ")
-    playerName = "hey"
-    # print("Hello " + playerName)
-    
-    print(table)
+    print(welcomeBanner)
 
     repeatFlag = True
 
@@ -39,7 +35,7 @@ def set_up():
 
         start = input()
         if start == "Y" or start == "y" or start == "yes":
-            play_game(playerName, 1, 500)
+            play_game(0, 5)
             repeatFlag = False
         elif start == "N" or start == "n" or start == "no":
             exit_game()
@@ -47,7 +43,7 @@ def set_up():
             print("I'm sorry, I didn't understand your response.")
         
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
-def play_game(playerName, round, winnings):
+def play_game(round, chips):
 # Loops through rounds of the game until player runs out of money
 # or manually exits the game
     '''
@@ -61,64 +57,64 @@ def play_game(playerName, round, winnings):
     # Variable Set Up
     stopGame = False
     hand = ["", "", "", "", ""]
-    round = 0
     inputFlag = True
-
 
     #while winnings > 0 or stopGame:
     round += 1
     # print round stats
-    round_stats(round, winnings)
+    round_stats(round, chips)
     # deals starting hand / pre-flop
     deal_starting_hand(hand)
     # prints hand for player
     print_hand(hand)
 
+    betFlag = False
+
+    while betFlag == False:
+        betFlag = bet(chips)
+    
+    playerCall = input()
     while inputFlag:
-        print("\nWould you like to \n1) Check \n2) Bet \n3) Fold?")
+        print("Would you like to 1) trade or 2) hold")
         playerCall = input()
 
         if playerCall == "1":
             print("player checked")
             inputFlag = False
         elif playerCall == "2":
-            inputFlag = bet(winnings)
             print("player betted")
-        elif playerCall == "3":
-            print("player folded")
             inputFlag = False
         else:
             print("Please enter a valid option.")
 
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''   
-def bet(winnings):
+def bet(chips):
     print("How much would you like to bet?")
-    betValue = input()
+    betValue = int(input())
 
-    if betValue > winnings:
-        print("You don't have that much money. Please choose another option:")
-        return True
-    else:
-        print_pot
+    if betValue > chips:
+        print("You don't have enough chips, try again")
         return False
-
-
+    else:
+        return True
 
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''   
 def deal_starting_hand(hand):
 # Deals the starting hand to player: two random cards
     '''
         Variables: 
-                   hand[0,1] - first two cards in players hand
+                   hand[] - cards in players hand
         Returns: 
                 *NONE*
     '''
     print("Your hand:")
-    hand[0] = "[" + deal_card() + "]"
-    hand[1] = "[" + deal_card() + "]"
+    i = -1
+    for x in hand:
+        i += 1
+        hand[i] = "[" + deal_card() + "]"
 
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
-def round_stats(roundNum, winnings):
+def round_stats(roundNum, chips):
 # Prints round stats - player earnings, and round number
     '''
         Variables: 
@@ -127,11 +123,15 @@ def round_stats(roundNum, winnings):
         Returns: 
                 *NONE*
     '''
-    # print(table)
     print("+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+")
     print("\t\tROUND ", roundNum)
-    print("Your winnings: $", winnings)
     print("+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+")
+    print(table)
+    print("Chips: ",end="")
+    while chips > 0:
+        print("o ", end="")
+        chips -= 1
+    print("\n")
     
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def deal_card():
@@ -140,26 +140,12 @@ def deal_card():
         Variables: 
                     card - string, card dealt
                     number - int, number of card dealt 1-10 or J, Q, K, A
-                    suiteNum - number rep of suite ♣, ♦, ♠, ♥
-                    royalNum - number rep of face card J, Q, K, A
         Returns: 
-                card - string, representation of a number 1-10 or J, K, Q, A
-                        and suite ♣, ♦, ♠, ♥
+                card - string,  ♥ ☻ ♪ ♦ * ♣ o
     '''
     # Variable Set Up
-    card = ""
-    number = random.randint(1, 14)
-    suiteNum = random.randint(0, 3)
-    suite = suites[suiteNum]
-
-    # If the number is greater than 10, turn it into the corresponding
-    # royal card
-    if number > 10:
-        number = number % 11
-        royalnum = royal[number]
-        card = royalnum + suite
-    else:
-        card = str(number) + suite
+    number = random.randint(0, 5)
+    card = cards[number]
 
     return card
 

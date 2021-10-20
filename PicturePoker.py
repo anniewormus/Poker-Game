@@ -77,22 +77,74 @@ def play_game(round, chips):
 
     # sortHand(hand)
 
-    calculateWinnings(hand)
+    calculateWinnings(hand, playerBet)
     
     
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''   
-def calculateWinnings(hand):
-    handCount = [0, 0, 0, 0, 0]
+def calculateWinnings(hand, bet):
+    handCount = [0, 0, 0, 0, 0, 0]
     i = 0
     for x in hand:
         for y in cards:
             if x == "[" + y + "]":
                 handCount[cards.index(y)] += 1
     
+    print("handcount - ")
     i = 0
-    for i in range(5):
+    for i in range(6):
         print(handCount[i], end=" "),
+
+    print("\n")
+
+    max1 = max(handCount)
+    getMaxIndex1 = handCount.index(max1)
+    handCount[getMaxIndex1] = 0   
+
+    max2 = max(handCount)
+    getMaxIndex2 = handCount.index(max2) 
   
+    calculateCardScore(getMaxIndex1, max1, getMaxIndex2, max2, bet)
+
+'''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
+def calculateCardScore(max1, count1, max2, count2, bet):
+    # 5 of a kind +10 + card val*bet
+    # 4 of a kind +5 + card val*bet
+    # full house +3 + ( .6 * 3 cards + .4 * 2 cards) ceil
+    # 3 of a kind +2 + card val
+    # 2 pairs +1 + card val
+    # 1 pair +1 + card val / 2
+    # nothing +0
+
+# Calculates players winnings from round from their final hand and bet value
+    '''
+        Variables: 
+               max1 - index of card in cards[] array
+               count1 - number of cards with highest count in hand
+               max2 - index of second highest card in cards[] array
+               count2 - number of cards with second highest count in hand
+               bet - number of chips player bet
+
+        Returns: 
+                *NONE*
+    '''
+    # 5 of a kind
+    if count1 == 5:
+        print("5 of a kind")
+    # 4 of a kind
+    if count1 == 4:
+        print("4 of a kind")
+    # full house
+    if count1 == 3 and count2 == 2:
+        print("full house")
+    # 3 of a kind
+    elif count1 == 3:
+        print("3 of a kind")
+    # 2 pairs
+    if count1 == 2 and count2 == 2:
+        print("2 pairs")
+    # 1 pair
+    elif count1 == 2:
+        print("1 pair")
 
 '''=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'''
 def tradeOrHold(hand):
